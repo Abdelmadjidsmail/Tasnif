@@ -2,4 +2,4 @@
 A site that allows you to search for scientific journals
 
 
-##try it : http://journalsfordzphd.rf.gd/index2.php
+## try it : http://journalsfordzphd.rf.gd/index2.php
