@@ -1,11 +1,10 @@
-
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "madjidsmail";
+error_reporting(-1);
+ini_set('display_errors', 'On');
+include('conf/config.php');
 $output="";
 // Create connection
-$conn = mysqli_connect($servername, $username, $password,"laliste");
+$conn = mysqli_connect($servername, $username, $password,$database);
 
 
 // Check connection
@@ -19,13 +18,15 @@ if ($conn->connect_error) {
 
 // echo "Connected successfully";
 
-if (isset($_POST['search'])) {
-   $searchq=$_POST['search'] ;
+if (isset($_GET['search'])) {
+   $searchq=$_GET['search'] ;
 
 
 
 
-   $query =mysqli_query( $conn," SELECT* FROM table1 WHERE Titre LIKE '%$searchq%' OR Publisher LIKE '%$searchq%' LIMIT 0 , 50  ") or die() ;
+   //~ $query =mysqli_query( $conn," SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%' LIMIT 0 , 50  ") or die("Can't execute Query") ;
+   $query_phrase  ="SELECT * FROM table1  WHERE MATCH (titre, publisher) AGAINST ('$searchq' IN NATURAL LANGUAGE MODE) LIMIT 0 , 50 ;";
+   $query =mysqli_query( $conn, $query_phrase) or die("Can't execute Query") ;
    $count=mysqli_num_rows($query);
 
 if ($count==0) {
@@ -36,14 +37,20 @@ if ($count==0) {
 while ($row=mysqli_fetch_array($query)) {
     # code...
 
-    $title = $row['Titre'] ;
-    $ID=$row['ID'] ;
-    $publisher = $row['Publisher'] ;
-    $ISSN=$row['ISSN'] ;
-    $ESSN=$row['ESSN'] ;
-    $FolderN=$row['Folder Name'] ;
-    $CLASSE=$row['CLASSE'];
-    $URL=$row['URL'] ;
+    $title = $row['titre'] ;
+    $ID=$row['id'] ;
+    $publisher = $row['publisher'] ;
+    $ISSN=$row['issn'] ;
+    $ESSN=$row['essn'] ;
+    $FolderN=$row['foldername'] ;
+    $CLASSE=$row['category'];
+    $URL=$row['url'];
+    if(true)
+    {
+        $q   = str_replace(" ","+",$title);
+        $URL = "https://www.scimagojr.com/journalsearch.php?q=". $q;
+        //~ echo $URL;
+    }
 
 
 
@@ -60,7 +67,7 @@ while ($row=mysqli_fetch_array($query)) {
                   <h5 class="hidden">ESSN : '.$ESSN.'</h5>       
                   <h5>CLASS :'.$CLASSE.'</h5>
                   <h5 class="hidden">Folder Name : '.$FolderN.'</h5>
-                  <h5 class="hidden">URL :'.$URL.'</h5>
+                  <h5 class="hidden">URL :<a href="'.$URL.'">About</a></h5>
 
                   
                   
@@ -126,7 +133,7 @@ mysqli_close($conn) ;
     <link href="cover.css" rel="stylesheet">
   </head>
   <body class="text-center">
- <form action="index2.php" method="post">
+ <form action="index.php" method="get">
   <div class="jumbotron">
   <main role="main" class="inner cover">
     <h1 class="cover-heading">journals for dz phd.</h1>
