@@ -240,9 +240,17 @@ $updat= " UPDATE table2 SET searchnum = '$inc' WHERE titre = '$searchq' " ;
   
 
 
-
+     <H3>Search result  : <?php if (defined($count)) {
+     echo $count ;
+     } ?> </H3> 
+      <h3>total search : <?php echo $count2?>  </h3>
+      
+        <?php print('<div>'.$output.'</div>') ; ?>
       
 
+
+
+  
  
 
       <?php 
@@ -285,7 +293,19 @@ mysqli_close($conn);
     </div>
   </footer>
 
-  
+      <?php 
+      
+      for ($i=1; $i < $total_page ; $i++) { 
+       $pageurl ="http://127.0.0.1/dashboard/journals-for-dz-phd.-master%20(1)/journals-for-dz-phd.-master/index1.php?search=$searchq&page=$i";
+       echo ' <a href="'.$pageurl.'">'.$i.'</a>' ;
+
+      }
+     
+
+
+      
+      
+      ?>
 
 
 
