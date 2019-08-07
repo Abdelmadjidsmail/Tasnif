@@ -125,7 +125,7 @@ $updat= " UPDATE table2 SET searchnum = '$inc' WHERE titre = '$searchq' " ;
 }else {
   $insert ="INSERT INTO table2(`titre`, `searchnum`) VALUES('$searchq',1 ) ";
   $query3 =mysqli_query($conn,$insert);
-  echo('makayen');
+ 
 
 }
   
