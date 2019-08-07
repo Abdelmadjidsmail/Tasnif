@@ -47,4 +47,8 @@ body {
 .hidden {
   display: none;
 }
+
+.footer {
+  width: 80%;
+}
 /*# sourceMappingURL=style.css.map */

@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(-1);
 ini_set('display_errors', 'On');
 include('conf/config.php');
@@ -6,11 +7,24 @@ $output="";
 // Create connection
 $conn = mysqli_connect($servername, $username, $password,$database);
 
-
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
+
+//------------------------------
+
+
+$page = 1;
+if(!empty($_GET['page'])) {
+    $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+    if(false === $page) {
+        $page = 1;
+    }
+}
+
+
+
 
 
 
@@ -19,15 +33,21 @@ if ($conn->connect_error) {
 // echo "Connected successfully";
 
 if (isset($_GET['search'])) {
-   $searchq=$_GET['search'] ;
+  $searchq=$_GET['search'] ;
+  
+  
+    $count_per_page = 20;
+  $items_per_page=20;
+  $offset = ($page - 1) * $items_per_page;
 
+$query_phrase =  "SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%' LIMIT " .$offset. " ," .$items_per_page;
 
-
-
-   //~ $query =mysqli_query( $conn," SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%' LIMIT 0 , 50  ") or die("Can't execute Query") ;
-   $query_phrase  ="SELECT * FROM table1  WHERE MATCH (titre, publisher) AGAINST ('$searchq' IN NATURAL LANGUAGE MODE) LIMIT 0 , 50 ;";
-   $query =mysqli_query( $conn, $query_phrase) or die("Can't execute Query") ;
+   $query =mysqli_query( $conn,$query_phrase) or die("Can't execute Query") ;
+  //~ $query_phrase  ="SELECT * FROM table1  WHERE MATCH (titre, publisher) AGAINST ('.$searchq.' IN NATURAL LANGUAGE MODE) LIMIT 0 , 50 ;";
+  //~ $query =mysqli_query( $conn, $query_phrase) or die("Can't execute Query") ;
    $count=mysqli_num_rows($query);
+   $page_count = 0;
+  
 
 if ($count==0) {
   $output="there is no search result" ;
@@ -55,7 +75,6 @@ while ($row=mysqli_fetch_array($query)) {
 
 
 
-
     $output .= '
 
     <div class="card bg-light mb-3">
@@ -63,11 +82,11 @@ while ($row=mysqli_fetch_array($query)) {
                   <h5>ID :'.$ID.' </h5>
                   <h5>TITLE  :' .$title. ' </h5>
                   <h5>Publisher :'.$publisher.'</h5>   
-                  <h5 class="hidden">ISSN : '.$ISSN.'</h5>
-                  <h5 class="hidden">ESSN : '.$ESSN.'</h5>       
+                  <h5 id="card" class="hidden">ISSN : '.$ISSN.'</h5>
+                  <h5 id="card" class="hidden">ESSN : '.$ESSN.'</h5>       
                   <h5>CLASS :'.$CLASSE.'</h5>
-                  <h5 class="hidden">Folder Name : '.$FolderN.'</h5>
-                  <h5 class="hidden">URL :<a href="'.$URL.'">About</a></h5>
+                  <h5 id="card" class="hidden">Folder Name : '.$FolderN.'</h5>
+                  <h5 id="card" class="hidden">URL :<a href="'.$URL.'">About</a></h5>
 
                   
                   
@@ -79,10 +98,68 @@ while ($row=mysqli_fetch_array($query)) {
 }
 
 
-mysqli_close($conn) ;
+
+
+$var = "SELECT titre FROM table2 WHERE titre = '$searchq'" ;
+$query2 =mysqli_query($conn,$var);
+$resul = mysqli_num_rows($query2);
+if (!$query2) {
+  printf("Error: %s\n", mysqli_error($conn));
+  exit();
+}
+ 
+
+if (mysqli_num_rows($query2)>0) {
+  $in = "SELECT `searchnum` FROM `table2` WHERE titre= '$searchq'";
+  $query3=mysqli_query($conn,$in);
+  $resul = mysqli_num_rows($query3);
+  while ($row=mysqli_fetch_array($query3)){
+      $inc = $row['searchnum']+1 ;}
+
+$updat= " UPDATE table2 SET searchnum = '$inc' WHERE titre = '$searchq' " ;
+ $query4 =mysqli_query($conn,$updat);
+}else {
+  $insert ="INSERT INTO table2(`titre`, `searchnum`) VALUES('$searchq',1 ) ";
+  $query3 =mysqli_query($conn,$insert);
+  echo('makayen');
+
+}
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//mysqli_close($conn) ;
+
 
 
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -97,12 +174,13 @@ mysqli_close($conn) ;
 <!doctype html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>journals-for-dz-phd</title>
+    <title>Cover Template · Bootstrap</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/cover/">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -158,7 +236,7 @@ mysqli_close($conn) ;
   
 
 
-      <H3>Search result  : <?php echo $count?> </H3>
+     <H3>Search result  : <?php echo $count?> </H3> 
 
       
         <?php print('<div>'.$output.'</div>') ; ?>
@@ -167,23 +245,69 @@ mysqli_close($conn) ;
 
 
   
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
+ 
 
+      <?php 
+      
+        $query5= "SELECT titre FROM table2 GROUP BY searchnum ORDER BY searchnum DESC LIMIT 0, 3 ";
+        $r=mysqli_query($conn,$query5);
+        
+        if (!$query5) {
+          printf("Error: %s\n", mysqli_error($conn));
+          exit();
+        }
+       
+                echo '   <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+                         <div class="container text-center">
+                       
+                        <h3> most searched words </h3>' ;
+
+        while ($row = mysqli_fetch_array($r)) {
+        $titreA= $row['titre'];
+          if (true) {
+            $p   = str_replace(" ","+",$titreA);
+            $purl = "http://127.0.0.1/dashboard/journals-for-dz-phd.-master%20(1)/journals-for-dz-phd.-master/index.php?search=".$p;
+          }
+
+   
+                   echo   '  <h5 class=""><a href="'.$purl.'">'.$titreA.'</a></h5>
+                             <br>' ;
+
+
+
+        } // while 
+                 
+      
+      
+mysqli_close($conn);
+      
+      
+      ?>
+
+    
     </div>
   </footer>
-</div>
+
+      
+
+
 
  
 
 
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jquery-3.4.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="m.js"></script>
+
+ <script src="jquery-3.4.1.min.js"></script>
 
 
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-<script src="jquery-3.4.1.min.js"></script>
-<script src="jq.js"></script>
 </body>
 </html>
