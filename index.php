@@ -17,9 +17,9 @@ if ($conn->connect_error) {
 
 $page = 1;
 if(!empty($_GET['page'])) {
-    $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+    $page = $_GET['page'];
     if(false === $page) {
-        $page = 1;
+       // $page = 1;
     }
 }
 
@@ -35,18 +35,22 @@ if(!empty($_GET['page'])) {
 if (isset($_GET['search'])) {
   $searchq=$_GET['search'] ;
   
-  
-    $count_per_page = 20;
+  //$page =1;
+  $count_per_page = 20;
   $items_per_page=20;
   $offset = ($page - 1) * $items_per_page;
-
+  
 $query_phrase =  "SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%' LIMIT " .$offset. " ," .$items_per_page;
-
-   $query =mysqli_query( $conn,$query_phrase) or die("Can't execute Query") ;
+$query_phrase1 =  "SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%'  " ;
+$query1=mysqli_query( $conn,$query_phrase1) or die("Can't execute Query") ;
+$query =mysqli_query( $conn,$query_phrase) or die("Can't execute Query") ;
   //~ $query_phrase  ="SELECT * FROM table1  WHERE MATCH (titre, publisher) AGAINST ('.$searchq.' IN NATURAL LANGUAGE MODE) LIMIT 0 , 50 ;";
   //~ $query =mysqli_query( $conn, $query_phrase) or die("Can't execute Query") ;
+  $count2=mysqli_num_rows($query1);
    $count=mysqli_num_rows($query);
-   $page_count = 0;
+   $total_page = intval($count2/$items_per_page) ;
+  // echo $total_page;
+  // echo $page;
   
 
 if ($count==0) {
@@ -180,7 +184,7 @@ $updat= " UPDATE table2 SET searchnum = '$inc' WHERE titre = '$searchq' " ;
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Cover Template · Bootstrap</title>
+    <title>journals for dz phd</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/cover/">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -237,10 +241,10 @@ $updat= " UPDATE table2 SET searchnum = '$inc' WHERE titre = '$searchq' " ;
 
 
      <H3>Search result  : <?php echo $count?> </H3> 
-
+      <h3>total search : <?php echo $count2?>  </h3>
       
         <?php print('<div>'.$output.'</div>') ; ?>
-
+      
 
 
 
@@ -283,12 +287,23 @@ mysqli_close($conn);
       
       
       ?>
-
     
     </div>
   </footer>
 
+      <?php 
       
+      for ($i=1; $i < $total_page ; $i++) { 
+       $pageurl ="http://127.0.0.1/dashboard/journals-for-dz-phd.-master%20(1)/journals-for-dz-phd.-master/index.php?search=$searchq&page=$i";
+       echo ' <a href="'.$pageurl.'">'.$i.'</a>' ;
+
+      }
+     
+
+
+      
+      
+      ?>
 
 
 
