@@ -21,6 +21,7 @@ if(!empty($_GET['page'])) {
     if(false === $page) {
        // $page = 1;
     }
+}
 
 
 
