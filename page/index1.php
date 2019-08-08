@@ -150,7 +150,7 @@ while ($row=mysqli_fetch_array($query)) {
       <div class="inner">
         <h3 class="masthead-brand">journals4dzphd</h3>
         <nav class="nav nav-masthead justify-content-center">
-          <a class="nav-link " href="home.php">Home</a>
+          <a class="nav-link " href="./home.php">Home</a>
           <a class="nav-link active" href="index.php">Search</a>
         </nav>
       </div>
