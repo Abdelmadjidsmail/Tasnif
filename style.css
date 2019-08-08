@@ -1,54 +1,150 @@
+/*
+ * Globals
+ */
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: rgb(255, 255, 255);
+}
+
+
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
 body {
+  height: 100%;
+  background-color: #333;
+  
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+.cover-container {
+ max-width: 42em;
+}
+.cover-container1 {
+
+  max-width: 60em;
+
+}
+
+/*
+ * Header
+ */
+
+.forme{
+  margin-top :15%;
   width: 100%;
-  padding: 0;
-  margin: 0;
-  background-color: #313131;
+ }
+ .card-body{
+  width: 100%;
+  color:rgba(0, 0, 0, 0.335);
+ }
+ .card:hover{
+
+  box-shadow: 2px 2px rgb(175, 73, 6);
+
+ }
+.card-body .titre a{
+  float :left;
+  color:rgb(0, 0, 0);
+
+}
+.card-body .class{
+  
+  float :right;
+text-align: right;
+  
+
+}
+.card-body .pub{
+   
+  
+  margin-left: 0%;
+  float :right;
+  text-align: left;
+ }
+ 
+ 
+
+
+.masthead {
+  margin-bottom: 0rem;
 }
 
-.jumbotron {
-  width: 80%;
-  margin-left: 10%;
-  -webkit-box-shadow: 2px 2px rgba(223, 110, 18, 0.698);
-          box-shadow: 2px 2px rgba(223, 110, 18, 0.698);
+.masthead-brand {
+  margin-bottom: 0;
 }
 
-.has-search .form-control {
-  padding-left: 2.375rem;
+.nav-masthead .nav-link {
+  padding: .25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .5);
+  background-color: transparent;
+  border-bottom: .0em solid transparent;
 }
 
-.has-search .form-control-feedback {
-  position: absolute;
-  z-index: 2;
-  display: block;
-  width: 2.375rem;
-  height: 2.375rem;
-  line-height: 2.375rem;
-  text-align: center;
-  pointer-events: none;
-  color: #aaa;
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, .25);
 }
 
-.card {
-  margin-left: 10%;
-  position: relative;
-  width: 70%;
-  -webkit-transition: width 2s;
-  /* For Safari 3.1 to 6.0 */
-  transition: width 2s;
+.nav-masthead .nav-link + .nav-link {
+  margin-left: 1rem;
 }
 
-.card:hover {
-  width: 80%;
-  opacity: 4;
-  -webkit-box-shadow: 2px 2px rgba(223, 110, 18, 0.698);
-          box-shadow: 2px 2px rgba(223, 110, 18, 0.698);
+.nav-masthead .active {
+  color: #fff;
+  border-bottom-color: #fff;
 }
 
-.hidden {
-  display: none;
+@media (min-width: 48em) {
+  .masthead-brand {
+    float: left;
+  }
+  .nav-masthead {
+    float: right;
+  }
 }
 
-.footer {
-  width: 80%;
+
+/*
+ * Cover
+ */
+.cover {
+  padding: 0 1.5rem;
 }
-/*# sourceMappingURL=style.css.map */
+.cover .btn-lg {
+  padding: .75rem 1.25rem;
+  font-weight: 700;
+}
+
+
+/*
+ * Footer
+ */
+.mastfoot {
+  color: rgba(255, 255, 255, .5);
+}
