@@ -53,7 +53,12 @@ body {
 /*
  * Header
  */
+select{
 
+width: 20%;
+
+
+ }
 .forme{
   margin-top :15%;
   width: 100%;
@@ -80,16 +85,10 @@ text-align: right;
 
 }
 .card-body .pub{
-   
-  
   margin-left: 0%;
   float :right;
   text-align: left;
  }
- 
- 
-
-
 .masthead {
   margin-bottom: 0rem;
 }

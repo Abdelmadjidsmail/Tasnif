@@ -42,7 +42,7 @@ if ($conn->connect_error) {
           <h3 class="masthead-brand">journals4dzphd</h3>
           <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link active" href="home.php">Home</a>
-            <a class="nav-link" href="page\index.php">Search</a>
+            <a class="nav-link" href="index.php">Search</a>
             
           </nav>
         </div>
