@@ -74,11 +74,32 @@ if (isset($_GET['search'])) {
         $FolderN   = $row['foldername'];
         $CLASSE    = $row['category'];
         $URL       = $row['url'];
+
+  
+   
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
         if (true) {
             $q   = str_replace(" ", "+", $title);
             $URL = "https://www.scimagojr.com/journalsearch.php?q=" . $q;
-            
+         
         }
+
+
+
         $output .= '
 
     <div  class="card bg-light mb-3">
@@ -94,13 +115,28 @@ if (isset($_GET['search'])) {
 </div>
 </div>            
 ';
-        
-        
-        
-        
+
+
+
+   
         
     }
     
+    $resultjson = $conn->query("SELECT* FROM table1 WHERE titre LIKE '%$searchq%' OR publisher LIKE '%$searchq%'");
+    $dbdatajason = array();
+    while ( $row = $resultjson->fetch_assoc())  {
+      $dbdatajason[]=$row;
+      }
+    
+      
+      header("Content-Type: application/json; charset=UTF-8");
+     $fp = fopen('results.json', 'w');
+      fwrite($fp,  json_encode($dbdatajason));
+      //echo json_encode($dbdatajason);
+      fclose($fp);
+
+
+
     
     
     
@@ -129,6 +165,19 @@ if (isset($_GET['search'])) {
         
         
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
     
@@ -183,7 +232,7 @@ if (isset($_GET['search'])) {
 
             <input type="search" class="form-control" name="search" id="search" placeholder="TITLE, PUBLISHER  ">
             <select class="mdb-select md-form" name="class">
-              
+
               <option value="ALL">ALL </option>
               <option value="A">CLASS A</option>
               <option value="B">CLASS B</option>
