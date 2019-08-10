@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "root";
+$username = "j3130855admin";
 $password = "madjidsmail";
-$database="laliste";
+$database="j3130855_laliste";
 
 
 
