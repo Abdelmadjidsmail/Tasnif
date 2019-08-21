@@ -1,5 +1,2 @@
-# journals-for-dz-phd.
-A site that allows you to search for scientific journals
-
-
-## try it : http://journalsfordzphd.rf.gd/index2.php
+# TheSearch
+An app that allows the user to search for scientific journals with their classifications.
